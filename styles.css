@@ -1,0 +1,96 @@
+*, body, html {
+  padding:0;margin:0;
+  font-family: 'Roboto', 'Arial', sans-serif;
+  font-size:12px;
+}
+
+/* Header */
+div.header {
+  background:#3f51b5;
+  font-weight:600;
+  text-transform: uppercase;
+  color:white;
+  padding:12px;
+}
+
+div.header i { font-size:1em; }
+
+.footer {
+  padding:12px;
+}
+
+.container {
+  padding:0;
+}
+
+/* Lists*/
+
+.template {
+  display: none;
+}
+
+ul.playlists {
+  min-width: 350px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li.playlist {
+  padding:12px;
+  overflow: auto;
+  background: white;
+  border-bottom:1px solid #eee;
+  transition: all 0.3s ease-out;
+}
+
+li.playlist:hover {
+  background: #fafafa;
+}
+
+li.playlist div.info {
+  float:left;
+}
+
+li.playlist a.link {
+  outline: none;
+  display: block;
+  color: blue;
+}
+
+li.playlist span.date {
+  display: block;
+  color: #aaa;
+  margin-top:3px;
+  font-size:0.85em;
+  font-weight:400;
+}
+
+li.playlist span.date span {
+  font-size:1em;
+}
+
+li.playlist .button {
+  float:right;
+}
+
+button {
+  border:0;
+  background: transparent;
+  color: black;
+  padding:4px 12px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+button.delete {
+  color: #F44336;
+  border: 1px solid #eee;
+  font-weight:600;
+  font-size:0.8em;
+}
+
+button.delete:hover {
+  background: #B71C1C;
+  color: white
+}
