@@ -6,22 +6,25 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="header">Your GreatDJ<i>!</i> Playlists</div>
+<div class="header">
+  <img src="greatdj.png" />
+  <span>Your GreatDJ<i>!</i> Playlists</span>
+  </div>
+
 <div class="container">
-  <ul class="playlists">
-    <li class="playlist template">
-      <div class="info">
-        <a href="" class="link" data-bind="link"></a>
-        <span class="date">Last opened: <span data-bind="lastDate"></span></span>
-      </div>
-      <span class="button"><button class="delete" data-action="delete">X</button></span>
-    </li>
-  </ul>
+  <div data-hook="search-component"></div>
+  <div data-hook="list-component"></div>
+</div>
 
 <div class="footer">
   <button class="delete" data-action="delete-all">Remove All</button>
 </div>
 </div>
+  <script src="object-assign.js"></script>
+  <script src="components/Component.js"></script>
+  <script src="components/Search.js"></script>
+  <script src="components/List.js"></script>
+  <script src="components/Playlist.js"></script>
   <script src="DataStorage.js"></script>
   <script src="popup.js"></script>
 </body>

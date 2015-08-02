@@ -1,46 +1,80 @@
-chrome.webNavigation.onHistoryStateUpdated.addListener(function(details){
-  savePlaylist(details.url);
-}, {url: [{hostSuffix: "great.dj"}]});
+console.log('great.dj extension started');
 
-chrome.webNavigation.onCompleted.addListener(function(details){
+chrome.webNavigation.onHistoryStateUpdated.addListener(function(details){
+  console.log(1)
   savePlaylist(details.url);
-}, {url: [{hostSuffix: "great.dj"}]});
+}, {url: [{hostContains: "great.dj"}]});
+
+// chrome.webNavigation.onCompleted.addListener(function(details){
+//   console.log(2)
+//   //savePlaylist(details.url);
+// }, {url: [{hostContains: "great.dj"}]});
 
 //
 
-function getPlaylistId(url){
-  var split = url.split('/');
-  return split[3];
-}
-
 function savePlaylist(url){
-  var id = getPlaylistId(url);
+  var id = _getPlaylistId(url);
 
-  if(id){
-    chrome.storage.local.get({
-      "playlists": [],
-    }, function(storage) {
-      var playlists = storage.playlists;
+  if(!id) return;
 
-      var newPlaylists = [];
-      playlists.forEach(function(pl){
-        if(pl.id !== id){
-          newPlaylists.push(pl);
-        }
-      });
+  chrome.storage.local.get({
+    "playlists": [],
+  }, function(storage) {
+    var playlists = storage.playlists.slice(0, 50);
 
-      newPlaylists.push({
-        id: id,
-        link: url,
-        lastDate: new Date().getTime()
-      });
+    var newEntry = {
+      id: id,
+      link: 'http://great.dj/' + id,
+      lastDate: new Date().getTime(),
+      content: '',
+      videos: [],
+      title: '',
+    }
 
-      newPlaylists.sort(function(a, b){ return (a.lastDate || 1) < (b.lastDate || 0); });
+    // if we already have it on the list, delete
+    for (var i = playlists.length - 1; i >= 0; i--) {
+      if(playlists[i].id === id){
+        newEntry.title = playlists[i].title;
+        playlists.splice(i, 1);
+        break;
+      }
+    };
+
+    _getPlaylistDetails(id, function(res){
+      newEntry.videos = res.videos;
+      newEntry.content = _artistsToContent(res.artists, res.videos);
+
+      playlists.unshift(newEntry);
 
       chrome.storage.local.set({
-        "playlists": newPlaylists
+        "playlists": playlists
       });
 
-    });
-  }
+    })
+  });
 }
+
+function _getPlaylistId(url){
+  var split = url.match(/great\.dj\/(\w+)(?:$|#)/);
+  if(split) return split[1];
+}
+
+function _getPlaylistDetails(id, callback){
+  console.log('_getPlaylistDetails');
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://great.dj/details?id="+id, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) {
+      var resp = JSON.parse(xhr.responseText);
+      callback(resp.data);
+    }
+  }
+  xhr.send();
+}
+
+function _artistsToContent(artists, pl){
+  var names = artists.slice(0, 3).map(function(artist){ return artist.name; });
+  return pl.length + ' songs, including ' + names.join(', ');
+}
+
+

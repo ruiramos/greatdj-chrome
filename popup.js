@@ -1,49 +1,32 @@
+window.app = window.app || {};
 
-var ds = new DataStorage();
+var ds = window.app.ds = new DataStorage();
+
+var listComponent = window.app.list.create();
+var searchComponent = window.app.search.create();
+var playlistFactory = window.app.playlist;
+
+// inter-component events
+listComponent.listenTo(searchComponent, 'filter:set', listComponent.setFilter);
+
+// attach components to dom
+listComponent.attachTo('[data-hook="list-component"]');
+searchComponent.attachTo('[data-hook="search-component"]').render();
 
 ds.onChange(function(){
   updatePopup();
 });
 
 function updatePopup(){
-  var playlistRoot = document.querySelector('.playlists'),
-      playlistTemplate = document.querySelector('.playlist.template'),
-      pls = ds.getPlaylists();
+  var pls = ds.getPlaylists();
 
-  if(!playlistRoot) return;
-
-  Array.prototype.forEach.call(playlistRoot.querySelectorAll('.playlist'), function(li){
-    if(!li.classList.contains('template')){
-      li.remove();
-    }
-  });
+  listComponent.clear();
 
   for (var i = 0; i < pls.length; i++) {
-
-    var el = playlistTemplate.cloneNode(true),
-        link = el.querySelector('[data-bind=link]'),
-        dateEl = el.querySelector('[data-bind=lastDate]'),
-        id = pls[i].id;
-
-    el.classList.remove('template');
-    el.setAttribute('data-id', id);
-
-    if(pls[i].lastDate)
-      dateEl.innerHTML = formatDate(pls[i].lastDate);
-    else
-      dateEl.innerHTML = '-';
-
-    link.innerHTML = pls[i].link;
-    link.setAttribute('href', pls[i].link);
-    link.setAttribute('target', "_blank");
-
-    el.querySelector('[data-action="delete"]').addEventListener('click', function(e){
-      ds.removePlaylist(id);
-    });
-
-    playlistRoot.appendChild(el);
+    listComponent.addPlaylist(playlistFactory.create(pls[i]));
   }
 
+  listComponent.render();
 }
 
 function registerButtonHandlers(){
@@ -52,11 +35,6 @@ function registerButtonHandlers(){
       ds.resetStorage();
     }
   );
-}
-
-function formatDate(date){
-  var dateString = new Date(date).toDateString().split(' ');
-  return dateString[0] + ', ' + dateString[2]  + ' ' + dateString[1];
 }
 
 document.addEventListener('DOMContentLoaded', function() {

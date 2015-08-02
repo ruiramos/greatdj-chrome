@@ -36,6 +36,15 @@ var DataStorage = function(){
       chrome.storage.local.set({
         "playlists": ds.playlists
       }, fn || function(){});
+    },
+
+    /**
+    * Helper: gets playlist id from url
+    *
+    */
+    _getPlaylistId: function(url){
+      var split = url.match(/great\.dj\/(\w+)(?:$|#)/);
+      if(split) return split[1];
     }
   };
 
@@ -45,16 +54,47 @@ var DataStorage = function(){
     getPlaylists: function(){
       return ds.playlists;
     },
-    // addPlaylist: function(playlist){
-    //   var found = false;
-    //   ds.playlists.forEach(function(pl){
-    //     found = found || (pl.id === playlist.id);
-    //   });
-    //   if(!found){
-    //     ds.playlists.push(playlist);
-    //     ds.methods._saveDataStorage();
-    //   }
-    // },
+
+    saveTitleOnPlaylist: function(id, title){
+      ds.playlists.forEach(function(pl){
+        if(pl.id === id){
+          pl.title = title;
+        }
+      });
+
+      ds.methods._saveDataStorage();
+
+    },
+
+    addPlaylist: function(url){
+      var id = ds.methods._getPlaylistId(url);
+
+      if(!id) return;
+
+      var newEntry = {
+        id: id,
+        link: 'http://great.dj/' + id,
+        lastDate: new Date().getTime(),
+        content: '',
+        artists: '',
+        title: '',
+      }
+
+      // if we already have it on the list, delete
+      for (var i = ds.playlists.length - 1; i >= 0; i--) {
+        if(playlists[i].id === id){
+          newEntry.title = playlists[i].title;
+          delete playlists[i];
+          return;
+        }
+      };
+
+      playlists.unshift(newEntry);
+
+      ds.methods._saveDataStorage();
+
+    },
+
     removePlaylist: function(id){
       var newArray = [];
       ds.playlists.forEach(function(pl){
@@ -67,12 +107,14 @@ var DataStorage = function(){
       ds.methods._saveDataStorage();
 
     },
+
     resetStorage: function(){
       ds.playlists = [];
       ds.methods._saveDataStorage();
     },
+
     onChange: function(fn){
       ds._updateCallback = fn;
-    }
+    },
   };
 };
