@@ -122,10 +122,44 @@ li.playlist .buttons {
   float:right;
 }
 
-li.playlist .contents {
-  font-size:0.85em;
+li.playlist .contents,
+li.playlist .filter-match:not(:empty) {
+  font-size:0.9em;
   clear: both;
   padding-top: 10px;
+}
+
+li.playlist .filter-match:not(:empty) {
+  margin-top: 10px;
+  display: inline-block;
+  padding: 3px;
+  background: #FFFFCA;
+  color: #979E07;
+}
+
+li.playlist .filter-match span {
+  font-style: italic;
+  font-size:1em;
+}
+
+li.special-message,
+li.special-message a {
+  font-size: 2em;
+  line-height: 1.35em;
+  color: #efefef;
+  text-shadow: 1px 2px 0px rgba(0,0,0,0.0);
+  text-align: center;
+  margin: 40px 20px;
+}
+
+li.special-message a {
+  font-size: 1em;
+  margin:0;
+  text-decoration: underline;
+}
+
+li.special-message a:hover {
+  color: #ddd;
 }
 
 /* The text input for the playlists title */

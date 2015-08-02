@@ -174,7 +174,8 @@ var Component = {
   },
 
   _setBoundElementValue: function(key, elm){
-    var elm = elm || this._el.querySelector('[data-hook~="'+key+'"]'),
+    var elm = elm || this._el.querySelector('[data-hook~="'+key+'"]') ||
+      (this._el.parentNode ? this._el.parentNode.querySelector('[data-hook~="'+key+'"]') : undefined),
         val = (this._bindings[key].decorator ?
             this._bindings[key].decorator(this._bindings[key].value) :
             this._bindings[key].value) || '';
@@ -187,7 +188,7 @@ var Component = {
       if(elm.tagName === 'INPUT')
         elm.value = val;
       else
-        elm.innerText = val
+        elm.innerHTML = val
     }
   },
 

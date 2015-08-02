@@ -5,13 +5,6 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(function(details){
   savePlaylist(details.url);
 }, {url: [{hostContains: "great.dj"}]});
 
-// chrome.webNavigation.onCompleted.addListener(function(details){
-//   console.log(2)
-//   //savePlaylist(details.url);
-// }, {url: [{hostContains: "great.dj"}]});
-
-//
-
 function savePlaylist(url){
   var id = _getPlaylistId(url);
 

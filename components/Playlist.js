@@ -25,6 +25,7 @@ Object.assign(playlist, window.app.Component, {
           '<button class="delete" data-action="delete">X</button>' +
         '</span>' +
         '<div class="contents" data-hook="content"></div>' +
+        '<div class="filter-match" data-hook="filter-match"></div>' +
       '</li>',
 
   bindings: {
@@ -42,12 +43,14 @@ Object.assign(playlist, window.app.Component, {
       hook: 'playlist-container',
       attribute: 'data-id'
     },
+    filterMatch: 'filter-match',
     editButton: 'edit-title-button'
   },
 
   props: {
     editButton: 'Add title',
     title: '',
+    filterMatch: ''
   },
 
   events: {
