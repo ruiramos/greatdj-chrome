@@ -17,7 +17,7 @@ function savePlaylist(url){
 
     var newEntry = {
       id: id,
-      link: 'http://great.dj/' + id,
+      link: 'https://great.dj/' + id,
       lastDate: new Date().getTime(),
       content: '',
       videos: [],
@@ -55,7 +55,7 @@ function _getPlaylistId(url){
 function _getPlaylistDetails(id, callback){
   console.log('_getPlaylistDetails');
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "http://great.dj/details?id="+id, true);
+  xhr.open("GET", "https://great.dj/details?id="+id, true);
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
       var resp = JSON.parse(xhr.responseText);
