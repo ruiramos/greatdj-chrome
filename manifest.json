@@ -3,7 +3,7 @@
 
   "name": "GreatDJ",
   "description": "This extension automatically saves all the playlists you create or access in great.dj, for the greatest convenience.",
-  "version": "2.6",
+  "version": "2.6.1",
 
  "permissions": [
     "webNavigation", "storage", "https://great.dj/*"
