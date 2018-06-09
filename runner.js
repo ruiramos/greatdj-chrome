@@ -34,8 +34,8 @@ function savePlaylist(url){
     };
 
     _getPlaylistDetails(id, function(res){
-      newEntry.videos = res.videos;
-      newEntry.content = _artistsToContent(res.artists, res.videos);
+      newEntry.videos = res.playlist;
+      newEntry.content = _artistsToContent(res.settings.artists, res.videos);
 
       playlists.unshift(newEntry);
 
@@ -48,14 +48,18 @@ function savePlaylist(url){
 }
 
 function _getPlaylistId(url){
-  var split = url.match(/great\.dj\/(\w+)(?:$|#)/);
-  if(split) return split[1];
+  var split = url.match(/great\.dj\/(.+)(?:$|#|\?)/);
+  if(split){
+    let splitNoId = split[1].match(/(.+)\/\d+/);
+    if(splitNoId) return splitNoId[1];
+    else return split[1];
+  }
 }
 
 function _getPlaylistDetails(id, callback){
   console.log('_getPlaylistDetails');
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "https://great.dj/details?id="+id, true);
+  xhr.open("GET", "https://api.great.dj/p?id="+id, true);
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
       var resp = JSON.parse(xhr.responseText);
