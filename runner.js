@@ -35,7 +35,7 @@ function savePlaylist(url){
 
     _getPlaylistDetails(id, function(res){
       newEntry.videos = res.playlist;
-      newEntry.content = _artistsToContent(res.settings.artists, res.videos);
+      newEntry.content = _artistsToContent(res.settings.artists, res.playlist);
 
       playlists.unshift(newEntry);
 
