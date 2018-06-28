@@ -63,7 +63,7 @@ function _getPlaylistDetails(id, callback){
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
       var resp = JSON.parse(xhr.responseText);
-      callback(resp.data);
+      callback(resp);
     }
   }
   xhr.send();
